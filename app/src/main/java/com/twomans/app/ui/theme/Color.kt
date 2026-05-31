@@ -2,10 +2,9 @@ package com.twomans.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val ForestGreen     = Color(0xFF6B8455)   // primary — headline, card, bottom button
+val ForestGreenDeep = Color(0xFF4E6240)   // flat shadow offset
+val ForestGreenMid  = Color(0xFF5C7347)   // secondary — copy button bg
+val Gold            = Color(0xFFC8A84A)   // action button
+val Cream           = Color(0xFFEDE8DA)   // screen background
+val WarmWhite       = Color(0xFFF5F0E8)   // surface variant
