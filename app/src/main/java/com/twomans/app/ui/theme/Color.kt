@@ -8,3 +8,4 @@ val ForestGreenMid  = Color(0xFF5C7347)   // secondary — copy button bg
 val Gold            = Color(0xFFC8A84A)   // action button
 val Cream           = Color(0xFFEDE8DA)   // screen background
 val WarmWhite       = Color(0xFFF5F0E8)   // surface variant
+val Blush           = Color(0xFFE8C4AE)   // distance badge
