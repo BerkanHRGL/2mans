@@ -4,20 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material3.Icon
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,11 +21,10 @@ import androidx.compose.ui.unit.sp
 import com.twomans.app.ui.theme.*
 
 @Composable
-fun OnboardingScreen(onContinue: () -> Unit = {}) {
-    val clipboardManager = LocalClipboardManager.current
-    val pairLink = "2mans.app/____"
-    var linkCopied by remember { mutableStateOf(false) }
-
+fun OnboardingScreen(
+    onGetStarted: () -> Unit = {},
+    onSignIn: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -39,9 +34,9 @@ fun OnboardingScreen(onContinue: () -> Unit = {}) {
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 28.dp)
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(56.dp))
 
             // ── HEADLINE ───────────────────────────────────────────────
             Text(
@@ -57,135 +52,71 @@ fun OnboardingScreen(onContinue: () -> Unit = {}) {
 
             // ── BODY ───────────────────────────────────────────────────
             Text(
-                text = "2mans only works in pairs. Send your friend your link and your friend will join you.",
-                fontFamily = FontFamily.Default,
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                lineHeight = 24.sp,
+                text = "2mans works in pairs. Create an account, invite your plus-one, and start matching together.",
+                style = MaterialTheme.typography.bodyLarge,
                 color = ForestGreen.copy(alpha = 0.7f)
             )
-
-            Spacer(modifier = Modifier.height(28.dp))
-
-            // ── PAIR LINK CARD ─────────────────────────────────────────
-            FlatCard {
-                Text(
-                    text = "your pair link",
-                    fontFamily = FontFamily.Default,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 13.sp,
-                    color = Color.White.copy(alpha = 0.55f)
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = pairLink,
-                    fontFamily = FontFamily.Serif,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 26.sp,
-                    color = Color.White
-                )
-
-                Spacer(modifier = Modifier.height(18.dp))
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Share button (gold pill)
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(52.dp)
-                            .clip(RoundedCornerShape(26.dp))
-                            .background(Gold)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) { /* share intent */ },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Text Mira",
-                            fontFamily = FontFamily.Default,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
-                            color = Color.Black
-                        )
-                    }
-
-                    // Copy button (circle)
-                    Box(
-                        modifier = Modifier
-                            .size(52.dp)
-                            .clip(CircleShape)
-                            .background(ForestGreenMid)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) {
-                                clipboardManager.setText(AnnotatedString(pairLink))
-                                linkCopied = true
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.ContentCopy,
-                            contentDescription = "Copy link",
-                            tint = if (linkCopied) Gold else Color.White,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
         }
 
-        // ── STICKY BOTTOM BUTTON ───────────────────────────────────────
-        Box(
+        // ── BOTTOM ACTIONS ─────────────────────────────────────────────
+        Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(start = 24.dp, end = 24.dp, bottom = 28.dp)
+                .padding(start = 28.dp, end = 28.dp, bottom = 32.dp)
         ) {
-            // Flat shadow
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .offset(x = 4.dp, y = 4.dp)
-                    .clip(RoundedCornerShape(50.dp))
-                    .background(ForestGreenDeep)
-            )
-            // Button
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .clip(RoundedCornerShape(50.dp))
-                    .background(ForestGreen)
-                    .clickable(onClick = onContinue),
-                contentAlignment = Alignment.Center
+            // Get started button with flat shadow
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .offset(x = 4.dp, y = 4.dp)
+                        .clip(RoundedCornerShape(50.dp))
+                        .background(ForestGreenDeep)
+                )
+                Button(
+                    onClick = onGetStarted,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(50.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = ForestGreen)
+                ) {
+                    Text(
+                        text = "Get started →",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = Color.White
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
+                Text("Already have an account? ", fontSize = 14.sp, color = Taupe)
                 Text(
-                    text = "I sent it →",
-                    fontFamily = FontFamily.Default,
+                    text = "Sign in",
+                    fontSize = 14.sp,
+                    color = ForestGreen,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 17.sp,
-                    color = Color.White
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onSignIn
+                    )
                 )
             }
         }
     }
 }
 
-// Reusable card with flat offset shadow — will be used on other screens too
+// Reusable flat-shadow card — used on pair setup and other screens
 @Composable
 fun FlatCard(content: @Composable ColumnScope.() -> Unit) {
     Box(modifier = Modifier.fillMaxWidth()) {
-        // Shadow layer
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -193,7 +124,6 @@ fun FlatCard(content: @Composable ColumnScope.() -> Unit) {
                 .clip(RoundedCornerShape(20.dp))
                 .background(ForestGreenDeep)
         )
-        // Card layer
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -208,7 +138,5 @@ fun FlatCard(content: @Composable ColumnScope.() -> Unit) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun OnboardingScreenPreview() {
-    _2mansTheme {
-        OnboardingScreen()
-    }
+    _2mansTheme { OnboardingScreen() }
 }

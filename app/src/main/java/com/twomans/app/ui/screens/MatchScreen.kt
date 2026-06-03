@@ -4,7 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -24,6 +28,7 @@ import com.twomans.app.ui.theme.*
 
 @Composable
 fun MatchScreen(
+    onBack: () -> Unit = {},
     onSayHi: () -> Unit = {},
     onKeepSwiping: () -> Unit = {}
 ) {
@@ -39,7 +44,7 @@ fun MatchScreen(
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(56.dp))
 
             // ── HEADLINE ───────────────────────────────────────────────
             Text(
@@ -74,19 +79,13 @@ fun MatchScreen(
                     .height(320.dp),
                 contentAlignment = Alignment.Center
             ) {
-                // Left card — behind, rotated CCW
                 PolaroidCard(
                     name = "Ava & Mira",
-                    modifier = Modifier
-                        .offset(x = (-62).dp, y = 0.dp)
-                        .rotate(-7f)
+                    modifier = Modifier.offset(x = (-62).dp, y = 0.dp).rotate(-7f)
                 )
-                // Right card — in front, rotated CW
                 PolaroidCard(
                     name = "Henk & Jan",
-                    modifier = Modifier
-                        .offset(x = 62.dp, y = 24.dp)
-                        .rotate(4f)
+                    modifier = Modifier.offset(x = 62.dp, y = 24.dp).rotate(4f)
                 )
             }
 
@@ -98,11 +97,9 @@ fun MatchScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .navigationBarsPadding()
                 .padding(horizontal = 24.dp, vertical = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // say hi button with flat shadow
             Box(modifier = Modifier.fillMaxWidth()) {
                 Box(
                     modifier = Modifier
@@ -134,7 +131,6 @@ fun MatchScreen(
             Text(
                 text = "or keep swiping",
                 color = ForestGreen,
-                fontFamily = FontFamily.Default,
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
                 modifier = Modifier.clickable(
@@ -142,6 +138,30 @@ fun MatchScreen(
                     indication = null,
                     onClick = onKeepSwiping
                 )
+            )
+        }
+
+        // ── BACK BUTTON ────────────────────────────────────────────────
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .statusBarsPadding()
+                .padding(start = 20.dp, top = 12.dp)
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(Color.White.copy(alpha = 0.45f))
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onBack
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = ForestGreen,
+                modifier = Modifier.size(20.dp)
             )
         }
     }
@@ -166,12 +186,7 @@ private fun PolaroidCard(name: String, modifier: Modifier = Modifier) {
                 .background(ForestGreen)
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = name,
-            fontWeight = FontWeight.Bold,
-            fontSize = 13.sp,
-            color = Color(0xFF1A1A1A)
-        )
+        Text(text = name, fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Color(0xFF1A1A1A))
         Spacer(modifier = Modifier.height(4.dp))
     }
 }
@@ -179,7 +194,5 @@ private fun PolaroidCard(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun MatchScreenPreview() {
-    _2mansTheme {
-        MatchScreen()
-    }
+    _2mansTheme { MatchScreen() }
 }

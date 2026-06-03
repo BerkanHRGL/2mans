@@ -38,7 +38,6 @@ fun SwipeScreen(
             .fillMaxSize()
             .background(Cream)
             .statusBarsPadding()
-            .navigationBarsPadding()
             .padding(horizontal = 20.dp)
     ) {
         Spacer(modifier = Modifier.height(16.dp))
