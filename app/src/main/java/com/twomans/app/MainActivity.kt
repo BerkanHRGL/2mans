@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.twomans.app.ui.screens.MatchScreen
 import com.twomans.app.ui.screens.OnboardingScreen
 import com.twomans.app.ui.screens.SwipeScreen
 import com.twomans.app.ui.theme._2mansTheme
@@ -23,7 +24,13 @@ class MainActivity : ComponentActivity() {
                         OnboardingScreen(onContinue = { navController.navigate("swipe") })
                     }
                     composable("swipe") {
-                        SwipeScreen()
+                        SwipeScreen(onLike = { navController.navigate("match") })
+                    }
+                    composable("match") {
+                        MatchScreen(
+                            onSayHi = { /* chat screen — coming soon */ },
+                            onKeepSwiping = { navController.popBackStack() }
+                        )
                     }
                 }
             }
