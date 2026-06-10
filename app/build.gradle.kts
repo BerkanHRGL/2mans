@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
+    kotlin("native.cocoapods")
 }
 
 kotlin {
@@ -18,12 +19,18 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
+    // iosX64 (Intel simulator) is omitted: Compose Multiplatform 1.11.1 doesn't
+    // publish iosX64 artifacts, and Apple Silicon Macs use iosSimulatorArm64.
+    iosArm64()
+    iosSimulatorArm64()
+
+    cocoapods {
+        version = "1.0"
+        summary = "Shared Compose UI for 2mans"
+        homepage = "https://github.com/berkan/2mans"
+        ios.deploymentTarget = "15.0"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
             baseName = "ComposeApp"
             isStatic = true
         }

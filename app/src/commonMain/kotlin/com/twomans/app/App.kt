@@ -25,7 +25,9 @@ private val TAB_ROUTES = setOf("swipe", "chat", "profile")
 @Composable
 fun App() {
     _2mansTheme {
-        val vm: AppViewModel = viewModel()
+        // Explicit initializer: Kotlin/Native (iOS) has no reflection to construct
+        // the ViewModel from its class, unlike Android's default factory.
+        val vm: AppViewModel = viewModel { AppViewModel() }
         val authState by vm.authState.collectAsState()
         val currentPair by vm.currentPair.collectAsState()
 
@@ -37,8 +39,13 @@ fun App() {
         // auth first resolves, and back to onboarding on sign-out. Forward
         // navigation after that is driven by explicit button taps, so flipping
         // hasPair (e.g. creating a pair) does NOT yank the user off a screen.
+        // The NavHost sets the navigation graph during composition; until it does,
+        // currentBackStackEntry is null and navigate() would throw "graph has not
+        // been set" (stricter on iOS / newer navigation). Gate routing on that.
+        val graphReady = backStackEntry != null
         var didInitialRoute by remember { mutableStateOf(false) }
-        LaunchedEffect(authState) {
+        LaunchedEffect(authState, graphReady) {
+            if (!graphReady) return@LaunchedEffect
             when (val state = authState) {
                 is AppViewModel.AuthState.Unauthenticated -> {
                     navController.navigate("onboarding") { popUpTo(0) { inclusive = true } }
